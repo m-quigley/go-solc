@@ -11,7 +11,7 @@ import (
 	"slices"
 	"text/template"
 
-	"github.com/lmittmann/go-solc/internal/version"
+	"github.com/m-quigley/go-solc/internal/version"
 )
 
 var (

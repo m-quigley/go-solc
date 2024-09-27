@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/lmittmann/go-solc/internal/console"
-	"github.com/lmittmann/go-solc/internal/mod"
+	"github.com/m-quigley/go-solc/internal/console"
+	"github.com/m-quigley/go-solc/internal/mod"
 	"golang.org/x/sync/singleflight"
 )
 

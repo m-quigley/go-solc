@@ -3,11 +3,11 @@ module examples
 go 1.22
 
 require (
-	github.com/lmittmann/go-solc v0.0.0
+	github.com/m-quigley/go-solc v0.0.0
 	github.com/lmittmann/w3 v0.14.6
 )
 
-replace github.com/lmittmann/go-solc => ../
+replace github.com/m-quigley/go-solc => ../
 
 require (
 	github.com/DataDog/zstd v1.5.2 // indirect

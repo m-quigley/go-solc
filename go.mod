@@ -1,4 +1,4 @@
-module github.com/lmittmann/go-solc
+module github.com/m-quigley/go-solc
 
 go 1.22
 
