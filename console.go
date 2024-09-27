@@ -8,21 +8,26 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/vm"
+	"github.com/ethereum/go-ethereum/core/tracing"
 	"github.com/lmittmann/go-solc/internal/console"
 )
 
-// NewConsole returns a [vm.EVMLogger] that logs calls of console.sol to the
+// NewConsole returns a [vm.tracing.Hooks] that logs calls of console.sol to the
 // given testing.TB.
-func NewConsole(tb testing.TB) vm.EVMLogger {
-	return &consoleTracer{tb: tb}
+//
+// To use console logging in your Solidity contract, import "console.sol".
+func NewConsole(tb testing.TB) *tracing.Hooks {
+	tracer := &consoleTracer{tb: tb}
+	return &tracing.Hooks{
+		OnEnter: tracer.enterHook,
+	}
 }
 
 type consoleTracer struct {
 	tb testing.TB
 }
 
-func (ct *consoleTracer) CaptureEnter(typ vm.OpCode, from common.Address, to common.Address, input []byte, gas uint64, value *big.Int) {
+func (ct *consoleTracer) enterHook(depth int, typ byte, from common.Address, to common.Address, input []byte, gas uint64, value *big.Int) {
 	if to != console.Addr || len(input) < 4 {
 		return
 	}
@@ -55,15 +60,4 @@ func (ct *consoleTracer) log(args abi.Arguments, data []byte) {
 		}
 	}
 	ct.tb.Log(strings.Join(strVals, " "))
-}
-
-func (*consoleTracer) CaptureTxStart(uint64) {}
-func (*consoleTracer) CaptureTxEnd(uint64)   {}
-func (*consoleTracer) CaptureStart(*vm.EVM, common.Address, common.Address, bool, []byte, uint64, *big.Int) {
-}
-func (*consoleTracer) CaptureEnd([]byte, uint64, error)  {}
-func (*consoleTracer) CaptureExit([]byte, uint64, error) {}
-func (*consoleTracer) CaptureState(uint64, vm.OpCode, uint64, uint64, *vm.ScopeContext, []byte, int, error) {
-}
-func (*consoleTracer) CaptureFault(uint64, vm.OpCode, uint64, uint64, *vm.ScopeContext, int, error) {
 }
